@@ -3,24 +3,14 @@ import { createBrowserRouter } from "react-router-dom";
 // import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
+import WithSidebar from "../layout/WithSidebar";
 
-const SignInPage = lazy(() => import("../pages/auth/sign-in"));
 const SignUpPage = lazy(() => import("../pages/auth/sign-up"));
 const Dashboard = lazy(() => import("../pages/dashboard"));
 const RefreshSession = lazy(() => import("../pages/refresh-session"));
 const ErrorPage = lazy(() => import("../pages/error-page"));
 
 const router = createBrowserRouter([
-  {
-    path: "/sign-in",
-    element: (
-      <PublicRoute>
-        <Suspense fallback="Loading...">
-          <SignInPage />
-        </Suspense>
-      </PublicRoute>
-    ),
-  },
   {
     path: "/sign-up",
     element: (
@@ -36,7 +26,9 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <Suspense fallback="Loading...">
-          <Dashboard />
+          <WithSidebar>
+            <Dashboard />
+          </WithSidebar>
         </Suspense>
       </PrivateRoute>
     ),
