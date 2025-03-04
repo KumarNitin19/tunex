@@ -41,12 +41,13 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const toggleTheme = useCallback(
     (theme: ThemeMode) => {
       if (theme === ThemeEnum.LIGHT) {
-        document.documentElement.classList.add(ThemeEnum.DARK);
-        setMode(ThemeEnum.DARK);
+        document.documentElement.classList.add(theme);
+        document.documentElement.classList.remove(ThemeEnum.DARK);
       } else {
-        document.documentElement.classList.add(ThemeEnum.LIGHT);
-        setMode(ThemeEnum.LIGHT);
+        document.documentElement.classList.add(theme);
+        document.documentElement.classList.remove(ThemeEnum.LIGHT);
       }
+      setMode(theme);
     },
     [setMode]
   );

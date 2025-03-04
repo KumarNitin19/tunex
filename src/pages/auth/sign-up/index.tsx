@@ -8,6 +8,7 @@ import { auth, googleProvider } from "../../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import useSnackbar from "../../../hooks/useSnackbar";
+import Loader from "../../../atoms/Loader";
 
 function SignIn() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,11 +27,8 @@ function SignIn() {
           if (user && userClaims) {
             setItem("userDetails", {
               ...user,
-              idToken: userClaims?.token,
             });
-
-            navigate("/dashboard");
-
+            navigate("/");
             addSnackbar({
               message: "Logged In successfully!!",
               variant: "success",
@@ -74,6 +72,7 @@ function SignIn() {
           </Button>
         </div>
       </CardWithGradientBorder>
+      <Loader loading={isLoading} />
     </div>
   );
 }

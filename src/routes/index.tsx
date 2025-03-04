@@ -1,13 +1,12 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-// import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import WithSidebar from "../layout/WithSidebar";
+import Loader from "../atoms/Loader";
 
 const SignUpPage = lazy(() => import("../pages/auth/sign-up"));
 const Dashboard = lazy(() => import("../pages/dashboard"));
-const RefreshSession = lazy(() => import("../pages/refresh-session"));
 const ErrorPage = lazy(() => import("../pages/error-page"));
 
 const router = createBrowserRouter([
@@ -15,7 +14,7 @@ const router = createBrowserRouter([
     path: "/sign-up",
     element: (
       <PublicRoute>
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<Loader loading={true} />}>
           <SignUpPage />
         </Suspense>
       </PublicRoute>
@@ -25,7 +24,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <PrivateRoute>
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<Loader loading={true} />}>
           <WithSidebar>
             <Dashboard />
           </WithSidebar>
@@ -34,18 +33,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/refresh-session",
-    element: (
-      <Suspense fallback="Loading...">
-        <RefreshSession />
-      </Suspense>
-    ),
-  },
-  {
     path: "*",
     element: (
       <PublicRoute>
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<Loader loading={true} />}>
           <ErrorPage />
         </Suspense>
       </PublicRoute>

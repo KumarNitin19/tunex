@@ -1,28 +1,80 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Icon } from "../atoms/Icon";
 import Button from "../atoms/Button";
+import { logout } from "../utils/commonUtil";
+import Loader from "../atoms/Loader";
+import LOGO_DARK from "../assets/tunex-dark.svg";
+import LOGO_LIGHT from "../assets/tunex-light.svg";
+import useTheme from "../hooks/useTheme";
+import { ThemeEnum } from "../provider/Theme.Provider";
+
+type ListItemType = {
+  id: string;
+  label: string;
+  route: string;
+};
+
+const SIDEBAR_LIST_ITEMS: ListItemType[] = [
+  {
+    id: "1",
+    label: "Weekly Release",
+    route: "/",
+  },
+  {
+    id: "2",
+    label: "Featured Playlist",
+    route: "/",
+  },
+  {
+    id: "3",
+    label: "Browse Genre",
+    route: "/",
+  },
+];
+
+const ListItem: React.FC<{ listItem: ListItemType }> = ({ listItem }) => {
+  return (
+    <li>
+      <a
+        href={listItem?.route}
+        className="block text-main-text-light dark:text-main-text-dark text-lg hover:text-opacity-80 hover:font-medium transition">
+        {listItem?.label}
+      </a>
+    </li>
+  );
+};
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { mode, toggleTheme } = useTheme();
+
+  const handleUserLogout = useCallback(async () => {
+    setIsLoading(true);
+    await logout();
+    setIsLoading(false);
+  }, []);
 
   return (
     <>
-      {/* Overlay (closes sidebar when clicked) */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black opacity-50 z-40"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
       {/* Sidebar */}
       <div
-        className={`absolute top-0 left-0 z-50 w-full md:w-64 h-full bg-[#ffffffb3] dark:bg-[#000000b3] backdrop-blur-xs text-white p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`absolute top-0 left-0 z-50 w-full flex flex-col justify-between md:w-64 h-full bg-[#ffffffb3] dark:bg-transparent backdrop-blur-xs p-4 transition-transform duration-300 ease-in-out transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:static md:w-64`}>
         {/* Sidebar Header with Toggle Button */}
         <div className="flex justify-between items-center mb-8 relative">
-          <h2 className="text-2xl font-bold">MusicApp</h2>
+          <div className="flex gap-2">
+            <img
+              src={mode === ThemeEnum.LIGHT ? LOGO_DARK : LOGO_LIGHT}
+              alt="TuneX Logo"
+              height={32}
+              width={32}
+            />
+            <h2 className="text-main-text-light dark:text-main-text-dark text-2xl font-bold">
+              TuneX
+            </h2>
+          </div>
 
           {/* Toggle Button (Attached to Sidebar) */}
           <Button
@@ -41,48 +93,39 @@ const Sidebar: React.FC = () => {
 
         {/* List Items */}
         <ul className="space-y-4">
-          <li>
-            <a
-              href="#home"
-              className="block text-lg hover:text-opacity-80 transition">
-              Home
-            </a>
-          </li>
-          <li>
-            <a
-              href="#library"
-              className="block text-lg hover:text-opacity-80 transition">
-              Library
-            </a>
-          </li>
-          <li>
-            <a
-              href="#playlist"
-              className="block text-lg hover:text-opacity-80 transition">
-              Playlists
-            </a>
-          </li>
-          <li>
-            <a
-              href="#artists"
-              className="block text-lg hover:text-opacity-80 transition">
-              Artists
-            </a>
-          </li>
-          <li>
-            <a
-              href="#search"
-              className="block text-lg hover:text-opacity-80 transition">
-              Search
-            </a>
-          </li>
+          {SIDEBAR_LIST_ITEMS?.map((listItem) => (
+            <ListItem key={listItem?.id} listItem={listItem} />
+          ))}
         </ul>
 
         {/* Logout Button */}
-        <Button className="mt-8 w-full py-2 text-lg bg-red-600 rounded-lg hover:bg-red-500 transition">
-          Logout
-        </Button>
+        <div className="flex gap-2 items-center">
+          <Button
+            className="w-full py-2 text-lg rounded-lg transition"
+            variant="outline"
+            onClick={handleUserLogout}>
+            Logout
+          </Button>
+          <div className="divider"></div>
+          <Button
+            className="px-0 py-0 h-10 w-10 hidden md:flex items-center justify-center hover:text-foreground shrink-0 rounded-full bg-transparent dark:bg-transparent hover:bg-[#00000017] dark:hover:bg-[#ffffff17] text-main-text-light"
+            onClick={() =>
+              toggleTheme(
+                mode === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT
+              )
+            }>
+            <Icon
+              icon="uil:sun"
+              className="w-5 h-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-main-text-light"
+            />
+            <Icon
+              icon="basil:moon-outline"
+              className="absolute w-5 h-5  rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-main-text-dark"
+            />
+          </Button>
+        </div>
       </div>
+      <Loader loading={isLoading} />
     </>
   );
 };

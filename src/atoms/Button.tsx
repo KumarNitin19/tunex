@@ -12,10 +12,10 @@ const baseStyles =
 // Variant styles
 const variantStyles = {
   conatined:
-    "bg-primary text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400",
+    "bg-primary text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700",
   outline:
-    "border-2 border-primary text-primary hover:bg-[#f8f9fa] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-900",
-  text: "text-primary hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400",
+    "border-2 border-primary text-primary hover:bg-[#f8f9fa] dark:hover:bg-[#1e3a8a1a] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-900",
+  text: "text-primary hover:text-blue-700 dark:text-blue-600 dark:hover:text-blue-700",
 };
 
 // Size styles
