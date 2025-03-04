@@ -1,10 +1,56 @@
+import { useState } from "react";
 import LOGO_DARK from "../../../assets/tunex-dark.svg";
 import Button from "../../../atoms/Button";
 import { Icon } from "../../../atoms/Icon";
 import CardWithGradientBorder from "../../../molecules/CardWithGradientBorder";
+import { IdTokenResult, signInWithPopup, signOut } from "@firebase/auth";
+import { auth, googleProvider } from "../../../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import useSnackbar from "../../../hooks/useSnackbar";
 
 function SignIn() {
-  const signInWithGooglePopup = () => {};
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { setItem } = useLocalStorage();
+  const { addSnackbar } = useSnackbar();
+
+  //Sign-in with google
+  const signInWithGooglePopup = () => {
+    setIsLoading(true);
+    signInWithPopup(auth, googleProvider)
+      .then(async (result) => {
+        try {
+          const user = result.user;
+          const userClaims: IdTokenResult = await user.getIdTokenResult();
+          if (user && userClaims) {
+            setItem("userDetails", {
+              ...user,
+              idToken: userClaims?.token,
+            });
+
+            navigate("/dashboard");
+
+            addSnackbar({
+              message: "Logged In successfully!!",
+              variant: "success",
+            });
+          }
+        } catch (error) {
+          console.log(error);
+          await signOut(auth);
+          addSnackbar({
+            message: "Login failed, try again!!",
+            variant: "error",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      })
+      .catch((_error) => {
+        console.log(_error);
+      });
+  };
 
   return (
     <div className="flex items-center justify-center w-full h-full">
