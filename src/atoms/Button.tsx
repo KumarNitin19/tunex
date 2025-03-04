@@ -14,7 +14,7 @@ const variantStyles = {
   conatined:
     "bg-primary text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700",
   outline:
-    "border-2 border-primary text-primary hover:bg-[#f8f9fa] dark:hover:bg-[#1e3a8a1a] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-900",
+    "border-2 border-primary hover:border-blue-700 text-primary hover:text-blue-700 hover:bg-[#f8f9fa] dark:hover:bg-[#1e3a8a1a] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-900",
   text: "text-primary hover:text-blue-700 dark:text-blue-600 dark:hover:text-blue-700",
 };
 

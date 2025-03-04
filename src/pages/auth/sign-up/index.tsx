@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import useSnackbar from "../../../hooks/useSnackbar";
 import Loader from "../../../atoms/Loader";
+import BACKGROUD_IMAGE from "../../../assets/bg-pattern.png";
 
 function SignIn() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -51,7 +52,11 @@ function SignIn() {
   };
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div
+      className="flex items-center justify-center w-full h-full bg-cover"
+      style={{
+        backgroundImage: `url(${BACKGROUD_IMAGE})`,
+      }}>
       <CardWithGradientBorder>
         <div className="min-w-fit min-h-fit md:min-w-[566px] md:min-h-[348px] flex flex-col items-center justify-center gap-6 p-6">
           <div className="flex gap-2">
@@ -66,7 +71,7 @@ function SignIn() {
           <Button
             onClick={signInWithGooglePopup}
             variant="outline"
-            className="flex items-center  gap-3 ">
+            className="flex items-center gap-3 py-2">
             <Icon icon="logos:google-icon" />
             Sign In With Google
           </Button>
