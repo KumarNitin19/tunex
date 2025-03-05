@@ -1,55 +1,31 @@
-import { useState } from "react";
+import { useCallback } from "react";
 import LOGO_DARK from "../../../assets/tunex-dark.svg";
 import Button from "../../../atoms/Button";
 import { Icon } from "../../../atoms/Icon";
 import CardWithGradientBorder from "../../../molecules/CardWithGradientBorder";
-import { IdTokenResult, signInWithPopup, signOut } from "@firebase/auth";
-import { auth, googleProvider } from "../../../utils/firebase";
-import { useNavigate } from "react-router-dom";
-import useLocalStorage from "../../../hooks/useLocalStorage";
-import useSnackbar from "../../../hooks/useSnackbar";
-import Loader from "../../../atoms/Loader";
 import BACKGROUD_IMAGE from "../../../assets/bg-pattern.png";
+import "./style.css";
 
 function SignIn() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const { setItem } = useLocalStorage();
-  const { addSnackbar } = useSnackbar();
+  const signUpWithSpotify = useCallback(() => {
+    const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+    const redirect_uri = import.meta.env.VITE_APP_REDIRECT_URI;
+    const api_uri = import.meta.env.VITE_APP_SPOTIFY_URI;
+    const scope = [
+      "user-read-email",
+      "user-read-private",
+      "user-read-playback-state",
+      "user-modify-playback-state",
+      "user-read-currently-playing",
+      "user-read-recently-played",
+      "user-read-playback-position",
+      "user-top-read",
+    ];
 
-  //Sign-in with google
-  const signInWithGooglePopup = () => {
-    setIsLoading(true);
-    signInWithPopup(auth, googleProvider)
-      .then(async (result) => {
-        try {
-          const user = result.user;
-          const userClaims: IdTokenResult = await user.getIdTokenResult();
-          if (user && userClaims) {
-            setItem("userDetails", {
-              ...user,
-            });
-            navigate("/");
-            addSnackbar({
-              message: "Logged In successfully!!",
-              variant: "success",
-            });
-          }
-        } catch (error) {
-          console.log(error);
-          await signOut(auth);
-          addSnackbar({
-            message: "Login failed, try again!!",
-            variant: "error",
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      })
-      .catch((_error) => {
-        console.log(_error);
-      });
-  };
+    window.location.href = `${api_uri}?client_id=${clientId}&redirect_uri=${redirect_uri}&scope=${scope.join(
+      " "
+    )}&response_type=token&show_dialog=true`;
+  }, []);
 
   return (
     <div
@@ -69,15 +45,18 @@ function SignIn() {
             One stop platform for all your <br /> music cravings!!
           </span>
           <Button
-            onClick={signInWithGooglePopup}
+            onClick={signUpWithSpotify}
             variant="outline"
-            className="flex items-center gap-3 py-2">
-            <Icon icon="logos:google-icon" />
-            Sign In With Google
+            className="sign-in-with-spotify-button flex items-center gap-3 !py-2">
+            <Icon
+              className="spotify-icon"
+              icon="logos:spotify-icon"
+              fontSize={24}
+            />
+            Sign In With Spotify
           </Button>
         </div>
       </CardWithGradientBorder>
-      <Loader loading={isLoading} />
     </div>
   );
 }

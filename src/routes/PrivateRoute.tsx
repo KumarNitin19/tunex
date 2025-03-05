@@ -1,30 +1,35 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { memo, useEffect } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { onAuthStateChanged } from "@firebase/auth";
-import { auth } from "../utils/firebase";
-import { logout } from "../utils/commonUtil";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
-  const { setItem, getItem } = useLocalStorage();
-  const user = getItem("userDetails");
+  const { getItem, setItem } = useLocalStorage();
+  const spotifyToken = getItem("spotify-token");
 
   useEffect(() => {
-    if (user) {
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          const idToken = await user?.getIdToken();
-          setItem("userDetails", { ...user?.providerData[0], idToken });
-          navigate("/");
-        } else {
-          logout();
-        }
-      });
+    const route = window.location.pathname;
+    const hash = window.location.hash;
+    if (route === "/") {
+      if (hash) {
+        const token = hash.substring(1).split("&")[0].split("=")[1];
+        setItem("spotify-token", token);
+        navigate("/");
+      }
+    } else if (!spotifyToken) {
+      navigate("/sign-up");
     }
-  }, []);
+  }, [spotifyToken, setItem, navigate]);
 
-  return user ? children : <Navigate to="/sign-up" />;
+  // useEffect(() => {
+  //   if (spotifyToken) {
+  //     navigate("/");
+  //   } else {
+  //     navigate("/sign-up");
+  //   }
+  // }, [spotifyToken]);
+
+  return children;
 }
 
 export default memo(PrivateRoute);

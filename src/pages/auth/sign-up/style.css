@@ -1,0 +1,7 @@
+.spotify-icon path {
+  fill: #0468d7;
+}
+
+.sign-in-with-spotify-button:hover .spotify-icon path {
+  fill: #1d4ed8;
+}
