@@ -35,7 +35,11 @@ const ReleasedThisWeek = () => {
   return (
     <div className="flex flex-col md:p-6  divide-y dark:divide-[#535353]">
       {releasedThisWeek.map((song) => (
-        <SongListItem song={song} handlePlayTrack={handlePlayTrack} />
+        <SongListItem
+          key={song?.id}
+          song={song}
+          handlePlayTrack={handlePlayTrack}
+        />
       ))}
     </div>
   );

@@ -1,23 +1,36 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Icon } from "@iconify/react";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
+import { useCallback } from "react";
+import { setCurrentTrack } from "../store/spotifySlice";
 
 const Player = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const { currentTrack } = useSelector((state: RootState) => state.spotify);
   const progress = 50;
   const volume = 50;
+
+  const hidePlayer = useCallback(() => {
+    dispatch(setCurrentTrack(null));
+  }, []);
 
   if (!currentTrack) return null;
 
   return (
     <div
-      className="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-lg p-4 flex flex-col md:flex-row rounded-t-lg md:rouded-t-none md:items-center gap-6 md:gap-12 transition-all duration-300 z-[99]"
+      className="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-lg p-4 flex flex-col md:flex-row rounded-t-lg md:rounded-t-none md:items-center gap-6 md:gap-12 transition-all duration-300 z-[99]"
       style={{
         backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(${currentTrack.image})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}>
+      <div
+        role="button"
+        className="absolute md:hidden right-5 bg-white rounded-full"
+        onClick={hidePlayer}>
+        <Icon icon="material-symbols:close-rounded" fontSize={24} />
+      </div>
       <div className="flex items-center gap-4 shrink-0">
         <img
           src={currentTrack.image}
@@ -48,7 +61,7 @@ const Player = () => {
           </button>
         </div>
       </div>
-      <div className="flex items-center gap-5 min-w-0 w-[20%]">
+      <div className="flex items-center gap-5 min-w-0 md:w-[20%]">
         <Icon
           icon="material-symbols:volume-up-rounded"
           width="24"

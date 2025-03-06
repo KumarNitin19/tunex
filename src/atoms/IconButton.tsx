@@ -1,7 +1,7 @@
 import Button from "./Button";
 
 type IconButtonProps = {
-  className: string;
+  className?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const IconButton: React.FC<IconButtonProps> = ({

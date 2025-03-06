@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import GridTile from "../../molecules/GridTile";
 import { AppDispatch, RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ const GenrePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { genres } = useSelector((state: RootState) => state.spotify);
 
+  // Fetch all genres
   useEffect(() => {
     dispatch(getGenres());
   }, [dispatch]);

@@ -76,7 +76,7 @@ const Dashboard = () => {
         <GridSection
           title="Browse Genres"
           listItems={genres?.slice(15)}
-          onViewAll={() => navigate("/genres")}
+          onViewAll={() => navigate("/genre")}
           handleClick={handleGenreClick}
         />
 

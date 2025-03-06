@@ -56,6 +56,7 @@ const Sidebar: React.FC = () => {
 
   const goToPage = useCallback(
     (route: string) => {
+      console.log("knk");
       navigate(route);
       handleCloseSidebar();
     },
@@ -65,7 +66,7 @@ const Sidebar: React.FC = () => {
   return (
     <>
       <div
-        className={`absolute top-0 left-0 z-50 w-full flex flex-col justify-center md:w-64 h-full bg-[#fffffff2] dark:bg-[#000000cc] backdrop-blur-sm p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`absolute top-0 left-0  w-full flex flex-col justify-center md:w-64 h-full bg-[#fffffff2] dark:bg-[#000000cc] backdrop-blur-sm p-4 transition-transform duration-300 ease-in-out transform z-[99] ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:static md:w-64`}>
         <div className="flex justify-between items-center cursor-pointer absolute top-4 left-4 right-4">
@@ -86,8 +87,10 @@ const Sidebar: React.FC = () => {
           </div>
 
           <div
-            className={`absolute top-0 flex items-center justify-between w-full ${
-              isOpen ? "rotate-180 right-0" : "rotate-0 -right-[430px]"
+            className={`absolute top-0 flex items-center justify-between ${
+              isOpen
+                ? "rotate-180 right-0 w-fit"
+                : "rotate-0 -right-[430px] w-full"
             }`}>
             <IconButton
               className="!inline-flex md:!hidden transition-transform duration-300"
