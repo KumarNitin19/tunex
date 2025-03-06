@@ -16,7 +16,8 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
         setItem("spotify-token", token);
         navigate("/");
       }
-    } else if (!spotifyToken) {
+    }
+    if (!spotifyToken) {
       navigate("/sign-up");
     }
   }, [spotifyToken, setItem, navigate]);
