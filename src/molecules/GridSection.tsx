@@ -5,9 +5,15 @@ type Props = {
   title: string;
   onViewAll: () => void;
   listItems: GenericObject<string>[];
+  handleClick?: (item: GenericObject<string>) => void;
 };
 
-const GridSection: React.FC<Props> = ({ title, onViewAll, listItems }) => {
+const GridSection: React.FC<Props> = ({
+  title,
+  onViewAll,
+  listItems,
+  handleClick,
+}) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -20,7 +26,11 @@ const GridSection: React.FC<Props> = ({ title, onViewAll, listItems }) => {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {listItems.map((item) => (
-          <GridTile item={item} />
+          <GridTile
+            key={item?.id as string}
+            item={item}
+            handleClick={handleClick}
+          />
         ))}
       </div>
     </div>

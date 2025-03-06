@@ -3,7 +3,7 @@ import { Icon } from "../atoms/Icon";
 import { GenericObject } from "../commonType";
 
 type Props = {
-  item: GenericObject<string>;
+  item: GenericObject<string | string[]>;
 };
 
 const Banner: React.FC<Props> = ({ item }) => {
@@ -13,7 +13,7 @@ const Banner: React.FC<Props> = ({ item }) => {
         <div className="text-white font-medium z-[10] text-4xl uppercase">
           {item?.name}
         </div>
-        <Button className="flex gap-2 items-center justify-center !text-black rounded-3xl bg-white hover:bg-[#ffffffe6]">
+        <Button className="flex gap-2 items-center justify-center !text-black rounded-3xl bg-white hover:!bg-[#ffffffe6] hover:shadow-lg">
           <Icon icon="material-symbols:play-arrow-rounded" />
           Listen Now
         </Button>
@@ -21,7 +21,7 @@ const Banner: React.FC<Props> = ({ item }) => {
       <div>
         <img
           loading="lazy"
-          src={item?.image}
+          src={item?.image as string}
           alt="Most Listened"
           className="absolute inset-0 w-full h-full object-cover opacity-60"
         />

@@ -7,6 +7,9 @@ import Loader from "../atoms/Loader";
 
 const SignUpPage = lazy(() => import("../pages/auth/sign-up"));
 const Dashboard = lazy(() => import("../pages/dashboard"));
+const ReleasedThisWeek = lazy(() => import("../pages/released-this-week"));
+// const ReleasedThisWeek = lazy(() => import("../pages/released-this-week"));
+const Playlist = lazy(() => import("../pages/playlists"));
 const ErrorPage = lazy(() => import("../pages/error-page"));
 
 const router = createBrowserRouter([
@@ -27,6 +30,42 @@ const router = createBrowserRouter([
         <Suspense fallback={<Loader loading={true} />}>
           <WithSidebar>
             <Dashboard />
+          </WithSidebar>
+        </Suspense>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/released-this-week",
+    element: (
+      <PrivateRoute>
+        <Suspense fallback={<Loader loading={true} />}>
+          <WithSidebar>
+            <ReleasedThisWeek />
+          </WithSidebar>
+        </Suspense>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/genre",
+    element: (
+      <PrivateRoute>
+        <Suspense fallback={<Loader loading={true} />}>
+          <WithSidebar>
+            <ReleasedThisWeek />
+          </WithSidebar>
+        </Suspense>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/your-playlist",
+    element: (
+      <PrivateRoute>
+        <Suspense fallback={<Loader loading={true} />}>
+          <WithSidebar>
+            <Playlist />
           </WithSidebar>
         </Suspense>
       </PrivateRoute>

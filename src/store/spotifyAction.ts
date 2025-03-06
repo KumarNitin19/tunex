@@ -1,11 +1,13 @@
 import { privateApiClient } from "../utils/apiUtils";
 
-export const getTopTenReleasedThisWeekAsync = () =>
-  privateApiClient.get("/browse/new-releases?limit=10");
+export const getTopTenReleasedThisWeekAsync = () => {
+  return privateApiClient.get("/browse/new-releases?limit=10");
+};
 
-export const getRecommendationsAsync = () =>
-  privateApiClient.get(
-    "/albums/?ids=382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc"
-  );
+export const getAllReleasedThisWeekAsync = () => {
+  return privateApiClient.get("/api/user/playlists");
+};
 
-export const getGenersAsync = () => privateApiClient.get("/browse/categories");
+export const getGenreAsync = () => {
+  return privateApiClient.get("/browse/categories");
+};

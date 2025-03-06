@@ -1,18 +1,44 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  getRecommendationsAsync,
-  getGenersAsync,
+  getGenreAsync,
   getTopTenReleasedThisWeekAsync,
+  getAllReleasedThisWeekAsync,
 } from "./spotifyAction";
 import { GenericArray, GenericObject } from "../commonType";
+import { modifyReleaseSongsData } from "../utils/commonUtil";
+
+export type CurrentTrack = {
+  id: string;
+  name: string;
+  artists: string;
+  image: string;
+} | null;
+
+export type ReleasedThisWeek = {
+  images: { url: string }[];
+  name: string;
+  id: string;
+  artists: { name: string }[];
+};
 
 // Define the shape of the state
 interface SpotifyState {
-  releasedThisWeek: GenericArray<GenericObject<string | number>>[];
+  releasedThisWeek: GenericArray<{
+    image: string;
+    name: string;
+    id: string;
+    artists: string;
+  }>;
   featuredPlaylists: GenericArray<GenericObject<string | number>>[];
   genres: GenericArray<GenericObject<string | number>>[];
   loading: boolean;
+  currentTrack: CurrentTrack;
+  isPlaying: boolean;
   error: string | null;
+  currentGenre: GenericObject<string> | null;
+  selectedGenrePlaylist: Array<unknown>;
+  playlists: { id: string; name: string; image: string }[];
+  selectedPlaylist: string | null;
 }
 
 // Initial state
@@ -21,7 +47,13 @@ const initialState: SpotifyState = {
   featuredPlaylists: [],
   genres: [],
   loading: false,
+  currentTrack: null,
+  isPlaying: false,
   error: null,
+  currentGenre: null,
+  selectedGenrePlaylist: [],
+  playlists: [],
+  selectedPlaylist: null,
 };
 
 // Fetch Released This Week Songs
@@ -32,19 +64,21 @@ export const getTopTenReleasedThisWeek = createAsyncThunk(
       const response = await getTopTenReleasedThisWeekAsync();
       return response.data.albums.items;
     } catch (error: unknown) {
+      console.log(error);
       return rejectWithValue(error || "Error fetching data");
     }
   }
 );
 
-// Fetch Featured Playlists
-export const getRecommendations = createAsyncThunk(
-  "spotify/getRecommendations",
+// Fetch Released This Week Songs
+export const getReleasedThisWeek = createAsyncThunk(
+  "spotify/getReleasedThisWeek",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getRecommendationsAsync();
-      return response.data.albums;
+      const response = await getAllReleasedThisWeekAsync();
+      return response.data.albums.items;
     } catch (error: unknown) {
+      console.log(error);
       return rejectWithValue(error || "Error fetching data");
     }
   }
@@ -55,7 +89,7 @@ export const getGenres = createAsyncThunk(
   "spotify/getGenres",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getGenersAsync();
+      const response = await getGenreAsync();
       return response.data.categories.items;
     } catch (error: unknown) {
       return rejectWithValue(error || "Error fetching data");
@@ -63,11 +97,34 @@ export const getGenres = createAsyncThunk(
   }
 );
 
+// // Fetch Users Playlist
+// export const get = createAsyncThunk(
+//   "spotify/getGenres",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await getGenreAsync();
+//       return response.data.categories.items;
+//     } catch (error: unknown) {
+//       return rejectWithValue(error || "Error fetching data");
+//     }
+//   }
+// );
+
 // Redux Slice
 const spotifySlice = createSlice({
   name: "spotify",
   initialState,
-  reducers: {}, // No synchronous reducers needed
+  reducers: {
+    setCurrentTrack: (state, action) => {
+      state.currentTrack = action.payload;
+    },
+    setCurrentGenre: (state, action) => {
+      state.currentGenre = action.payload;
+    },
+    setSelectedPlaylist: (state, action) => {
+      state.selectedPlaylist = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getTopTenReleasedThisWeek.pending, (state) => {
@@ -76,21 +133,21 @@ const spotifySlice = createSlice({
       })
       .addCase(getTopTenReleasedThisWeek.fulfilled, (state, action) => {
         state.loading = false;
-        state.releasedThisWeek = action.payload;
+        state.releasedThisWeek = modifyReleaseSongsData(action.payload);
       })
       .addCase(getTopTenReleasedThisWeek.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(getRecommendations.pending, (state) => {
+      .addCase(getReleasedThisWeek.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(getRecommendations.fulfilled, (state, action) => {
+      .addCase(getReleasedThisWeek.fulfilled, (state, action) => {
         state.loading = false;
-        state.featuredPlaylists = action.payload;
-        console.log(action.payload);
+        state.releasedThisWeek = modifyReleaseSongsData(action.payload);
       })
-      .addCase(getRecommendations.rejected, (state, action) => {
+      .addCase(getReleasedThisWeek.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -108,4 +165,5 @@ const spotifySlice = createSlice({
   },
 });
 
+export const { setCurrentTrack, setCurrentGenre } = spotifySlice.actions;
 export default spotifySlice.reducer;
