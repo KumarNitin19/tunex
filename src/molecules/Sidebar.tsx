@@ -56,7 +56,6 @@ const Sidebar: React.FC = () => {
 
   const goToPage = useCallback(
     (route: string) => {
-      console.log("knk");
       navigate(route);
       handleCloseSidebar();
     },

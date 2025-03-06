@@ -61,8 +61,6 @@ const Dashboard = () => {
     [navigate]
   );
 
-  console.log(genres?.slice(15));
-
   return (
     <div className="text-text-light dark:text-text-dark">
       <Banner item={firstElementFromReleased} onListeNow={handlePlayTrack} />
