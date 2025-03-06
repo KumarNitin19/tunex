@@ -5,7 +5,7 @@ export const getTopTenReleasedThisWeekAsync = () => {
 };
 
 export const getAllReleasedThisWeekAsync = () => {
-  return privateApiClient.get("/api/user/playlists");
+  return privateApiClient.get("/browse/new-releases");
 };
 
 export const getGenreAsync = () => {

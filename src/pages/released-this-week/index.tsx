@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import {
+  addToRecentSongs,
   CurrentTrack,
   getReleasedThisWeek,
   setCurrentTrack,
@@ -18,6 +19,7 @@ const ReleasedThisWeek = () => {
 
   const handlePlayTrack = useCallback(
     (track: CurrentTrack) => {
+      dispatch(addToRecentSongs(track));
       dispatch(
         setCurrentTrack({
           id: track?.id,
@@ -31,7 +33,7 @@ const ReleasedThisWeek = () => {
   );
 
   return (
-    <div className="flex flex-col p-6 divide-y dark:divide-[#535353]">
+    <div className="flex flex-col md:p-6  divide-y dark:divide-[#535353]">
       {releasedThisWeek.map((song) => (
         <SongListItem song={song} handlePlayTrack={handlePlayTrack} />
       ))}

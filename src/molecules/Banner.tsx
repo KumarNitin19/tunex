@@ -3,17 +3,20 @@ import { Icon } from "../atoms/Icon";
 import { GenericObject } from "../commonType";
 
 type Props = {
-  item: GenericObject<string | string[]>;
+  item: GenericObject<string>;
+  onListeNow?: (item: GenericObject<string>) => void;
 };
 
-const Banner: React.FC<Props> = ({ item }) => {
+const Banner: React.FC<Props> = ({ item, onListeNow = () => {} }) => {
   return (
     <div className="relative w-full h-96 bg-primary rounded-3xl flex items-center justify-center overflow-hidden">
       <div className="absolute p-5 left-0 w-fit h-full flex flex-col justify-between z-[10]">
         <div className="text-white font-medium z-[10] text-4xl uppercase">
           {item?.name}
         </div>
-        <Button className="flex gap-2 items-center justify-center !text-black rounded-3xl bg-white hover:!bg-[#ffffffe6] hover:shadow-lg">
+        <Button
+          className="flex gap-2 items-center justify-center !text-black rounded-3xl bg-white hover:!bg-[#ffffffe6] hover:shadow-lg"
+          onClick={() => onListeNow(item)}>
           <Icon icon="material-symbols:play-arrow-rounded" />
           Listen Now
         </Button>

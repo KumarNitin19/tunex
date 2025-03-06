@@ -16,8 +16,8 @@ const WithSidebar: React.FC<props> = ({ children }) => {
         return "Weekly Release";
       case "/genre":
         return "Genres";
-      case "/your-playlist":
-        return "Your Playlist";
+      case "/recently-played":
+        return "Recently Played";
       default:
         return "Dashboard";
     }

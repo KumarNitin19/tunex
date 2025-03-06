@@ -28,8 +28,8 @@ const SIDEBAR_LIST_ITEMS: ListItemType[] = [
   },
   {
     id: "3",
-    label: "Your Playlist",
-    route: "/your-playlist",
+    label: "Recently Played",
+    route: "/recently-played",
   },
 ];
 
@@ -52,20 +52,28 @@ const Sidebar: React.FC = () => {
   const { mode } = useTheme();
   const navigate = useNavigate();
 
-  const goToPage = useCallback((route: string) => navigate(route), [navigate]);
+  const handleCloseSidebar = useCallback(() => setIsOpen(false), []);
+
+  const goToPage = useCallback(
+    (route: string) => {
+      navigate(route);
+      handleCloseSidebar();
+    },
+    [navigate]
+  );
 
   return (
     <>
       <div
-        className={`absolute top-0 left-0 z-50 w-full flex flex-col justify-center md:w-64 h-full bg-[#ffffffb3] dark:bg-[#000000cc] backdrop-blur-sm p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`absolute top-0 left-0 z-50 w-full flex flex-col justify-center md:w-64 h-full bg-[#fffffff2] dark:bg-[#000000cc] backdrop-blur-sm p-4 transition-transform duration-300 ease-in-out transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:static md:w-64`}>
-        <div
-          role="button"
-          title="Dashboard"
-          className="flex justify-between items-center cursor-pointer absolute top-4 left-4 right-4"
-          onClick={() => goToPage("/")}>
-          <div className="flex gap-2">
+        <div className="flex justify-between items-center cursor-pointer absolute top-4 left-4 right-4">
+          <div
+            className="flex gap-2"
+            role="button"
+            title="Dashboard"
+            onClick={() => goToPage("/")}>
             <img
               src={mode === ThemeEnum.LIGHT ? LOGO_DARK : LOGO_LIGHT}
               alt="TuneX Logo"

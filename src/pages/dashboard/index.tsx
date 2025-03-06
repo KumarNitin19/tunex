@@ -7,6 +7,7 @@ import {
   getTopTenReleasedThisWeek,
   setCurrentTrack,
   setCurrentGenre,
+  addToRecentSongs,
 } from "../../store/spotifySlice";
 import GridSection from "../../molecules/GridSection";
 import Banner from "../../molecules/Banner";
@@ -14,9 +15,8 @@ import { GenericObject } from "../../commonType";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch<AppDispatch>();
-  const { releasedThisWeek, genres } = useSelector(
+  const { releasedThisWeek, genres, recentlyPlayedSongs } = useSelector(
     (state: RootState) => state.spotify
   );
 
@@ -40,6 +40,7 @@ const Dashboard = () => {
 
   const handlePlayTrack = useCallback(
     (track: GenericObject<string>) => {
+      dispatch(addToRecentSongs(track));
       dispatch(
         setCurrentTrack({
           id: track?.id,
@@ -60,9 +61,11 @@ const Dashboard = () => {
     [navigate]
   );
 
+  console.log(genres?.slice(15));
+
   return (
     <div className="text-text-light dark:text-text-dark">
-      <Banner item={firstElementFromReleased} />
+      <Banner item={firstElementFromReleased} onListeNow={handlePlayTrack} />
       <div className="mt-8 space-y-8">
         <GridSection
           title="Released This Week"
@@ -72,13 +75,15 @@ const Dashboard = () => {
         />
         <GridSection
           title="Browse Genres"
-          listItems={genres?.slice(5)?.map((genre) => ({
-            id: genre?.id,
-            image: genre?.icons[0]?.url,
-            name: genre?.name,
-            href: genre?.href,
-          }))}
+          listItems={genres?.slice(15)}
           onViewAll={() => navigate("/genres")}
+          handleClick={handleGenreClick}
+        />
+
+        <GridSection
+          title="Recently Played"
+          listItems={recentlyPlayedSongs}
+          onViewAll={() => navigate("/recently-played")}
           handleClick={handleGenreClick}
         />
       </div>

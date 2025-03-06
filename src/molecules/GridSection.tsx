@@ -17,7 +17,9 @@ const GridSection: React.FC<Props> = ({
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">{title}</h2>
+        <h2 className="text-main-text-light dark:text-main-text-dark text-2xl font-semibold">
+          {title}
+        </h2>
         <button
           onClick={onViewAll}
           className="text-primary font-medium hover:underline">

@@ -7,12 +7,14 @@ import {
 import { GenericArray, GenericObject } from "../commonType";
 import { modifyReleaseSongsData } from "../utils/commonUtil";
 
+const MAX_RECENT_SONGS = 20;
+
 export type CurrentTrack = {
   id: string;
   name: string;
   artists: string;
   image: string;
-} | null;
+};
 
 export type ReleasedThisWeek = {
   images: { url: string }[];
@@ -21,24 +23,30 @@ export type ReleasedThisWeek = {
   artists: { name: string }[];
 };
 
+export type SpotifyGenre = {
+  icons: { url: string }[];
+  href: string;
+} & ReleasedThisWeek;
+
 // Define the shape of the state
 interface SpotifyState {
-  releasedThisWeek: GenericArray<{
-    image: string;
-    name: string;
-    id: string;
-    artists: string;
-  }>;
+  releasedThisWeek: GenericArray<CurrentTrack>;
   featuredPlaylists: GenericArray<GenericObject<string | number>>[];
-  genres: GenericArray<GenericObject<string | number>>[];
+  genres: GenericArray<{
+    id: string;
+    name: string;
+    href: string;
+    image: string;
+  }>;
   loading: boolean;
-  currentTrack: CurrentTrack;
+  currentTrack: CurrentTrack | null;
   isPlaying: boolean;
   error: string | null;
   currentGenre: GenericObject<string> | null;
   selectedGenrePlaylist: Array<unknown>;
   playlists: { id: string; name: string; image: string }[];
   selectedPlaylist: string | null;
+  recentlyPlayedSongs: CurrentTrack[];
 }
 
 // Initial state
@@ -54,6 +62,9 @@ const initialState: SpotifyState = {
   selectedGenrePlaylist: [],
   playlists: [],
   selectedPlaylist: null,
+  recentlyPlayedSongs: JSON.parse(
+    localStorage?.getItem("recentlyPlayedSongs") || "[]"
+  ),
 };
 
 // Fetch Released This Week Songs
@@ -97,19 +108,6 @@ export const getGenres = createAsyncThunk(
   }
 );
 
-// // Fetch Users Playlist
-// export const get = createAsyncThunk(
-//   "spotify/getGenres",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await getGenreAsync();
-//       return response.data.categories.items;
-//     } catch (error: unknown) {
-//       return rejectWithValue(error || "Error fetching data");
-//     }
-//   }
-// );
-
 // Redux Slice
 const spotifySlice = createSlice({
   name: "spotify",
@@ -123,6 +121,30 @@ const spotifySlice = createSlice({
     },
     setSelectedPlaylist: (state, action) => {
       state.selectedPlaylist = action.payload;
+    },
+    addToRecentSongs: (state, action) => {
+      const songIndex = state.recentlyPlayedSongs.findIndex(
+        (song) => song.id === action.payload.id
+      );
+      // removing if it's already there
+      if (songIndex !== -1) {
+        state.recentlyPlayedSongs.splice(songIndex, 1);
+      }
+      // adding to the front
+      state.recentlyPlayedSongs.unshift(action.payload);
+
+      // if size exceeds removing last element
+      if (state.recentlyPlayedSongs.length > MAX_RECENT_SONGS) {
+        state.recentlyPlayedSongs.pop();
+      }
+      localStorage.setItem(
+        "recentlyPlayedSongs",
+        JSON.stringify(state.recentlyPlayedSongs)
+      );
+    },
+    clearRecentSongs: (state) => {
+      state.recentlyPlayedSongs = [];
+      localStorage.removeItem("recentlyPlayedSongs");
     },
   },
   extraReducers: (builder) => {
@@ -156,7 +178,12 @@ const spotifySlice = createSlice({
       })
       .addCase(getGenres.fulfilled, (state, action) => {
         state.loading = false;
-        state.genres = action.payload;
+        state.genres = action.payload?.map((genre: SpotifyGenre) => ({
+          id: genre?.id,
+          image: genre?.icons[0]?.url,
+          name: genre?.name,
+          href: genre?.href,
+        }));
       })
       .addCase(getGenres.rejected, (state, action) => {
         state.loading = false;
@@ -165,5 +192,6 @@ const spotifySlice = createSlice({
   },
 });
 
-export const { setCurrentTrack, setCurrentGenre } = spotifySlice.actions;
+export const { setCurrentTrack, setCurrentGenre, addToRecentSongs } =
+  spotifySlice.actions;
 export default spotifySlice.reducer;
