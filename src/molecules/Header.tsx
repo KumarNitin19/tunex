@@ -15,7 +15,7 @@ const Header = ({ title }: HeaderProps) => {
 
   return (
     <header className="flex items-center justify-between sticky top-0 p-6 z-[49] backdrop-blur-sm  bg-[#ffffffb3] dark:bg-[#0000004d] shadow-sm">
-      <div className="flex items-center gap-2 mx-auto">
+      <div className="flex items-center gap-2 mx-auto md:mx-0">
         <IconButton onClick={goToDashboard}>
           <Icon icon="material-symbols:chevron-left" fontSize={24} />
         </IconButton>
