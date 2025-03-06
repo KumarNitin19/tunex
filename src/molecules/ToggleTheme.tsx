@@ -3,7 +3,7 @@ import IconButton from "../atoms/IconButton";
 import useTheme from "../hooks/useTheme";
 import { ThemeEnum } from "../provider/Theme.Provider";
 
-const ToggleTheme = ({ className = "" }: { className: string }) => {
+const ToggleTheme = ({ className = "" }: { className?: string }) => {
   const { mode, toggleTheme } = useTheme();
   return (
     <IconButton

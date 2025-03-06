@@ -33,12 +33,9 @@ const SIDEBAR_LIST_ITEMS: ListItemType[] = [
 
 const ListItem: React.FC<{ listItem: ListItemType }> = ({ listItem }) => {
   return (
-    <li>
-      <a
-        href={listItem?.route}
-        className="block text-main-text-light dark:text-main-text-dark text-lg hover:text-opacity-80 hover:font-medium transition">
-        {listItem?.label}
-      </a>
+    <li className="relative -mx-4 px-4 py-2 text-main-text-light dark:text-main-text-dark hover:text-white cursor-pointer transition-all duration-300 group">
+      <span className="absolute left-0 top-0 h-full w-0 bg-black dark:bg-white transition-all duration-300 group-hover:w-full"></span>
+      <span className="relative z-10">{listItem?.label}</span>
     </li>
   );
 };
@@ -50,7 +47,7 @@ const Sidebar: React.FC = () => {
   return (
     <>
       <div
-        className={`absolute top-0 left-0 z-50 w-full flex flex-col justify-center md:w-64 h-full bg-[#ffffffb3] dark:bg-transparent backdrop-blur-sm p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`absolute top-0 border left-0 z-50 w-full flex flex-col justify-center md:w-64 h-full bg-[#ffffffb3] dark:bg-[#0000004d] backdrop-blur-sm p-4 transition-transform duration-300 ease-in-out transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:static md:w-64`}>
         <div className="flex justify-between items-center absolute top-4 left-4 right-4">
@@ -84,7 +81,7 @@ const Sidebar: React.FC = () => {
             />
           </div>
         </div>
-        <ul className="space-y-4">
+        <ul>
           {SIDEBAR_LIST_ITEMS?.map((listItem) => (
             <ListItem key={listItem?.id} listItem={listItem} />
           ))}
