@@ -4,9 +4,9 @@ import useLocalStorage from "../hooks/useLocalStorage";
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { getItem } = useLocalStorage();
-  const user = getItem("userDetails");
+  const spotifyToken = getItem("spotify-token");
 
-  return !user ? children : <Navigate to="/" />;
+  return !spotifyToken ? children : <Navigate to="/" />;
 }
 
 export default memo(PublicRoute);

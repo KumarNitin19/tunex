@@ -21,14 +21,6 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
     }
   }, [spotifyToken, setItem, navigate]);
 
-  // useEffect(() => {
-  //   if (spotifyToken) {
-  //     navigate("/");
-  //   } else {
-  //     navigate("/sign-up");
-  //   }
-  // }, [spotifyToken]);
-
   return children;
 }
 
