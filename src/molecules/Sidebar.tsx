@@ -6,7 +6,7 @@ import useTheme from "../hooks/useTheme";
 import { ThemeEnum } from "../provider/Theme.Provider";
 import ToggleTheme from "./ToggleTheme";
 import IconButton from "../atoms/IconButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type ListItemType = {
   id: string;
@@ -33,15 +33,26 @@ const SIDEBAR_LIST_ITEMS: ListItemType[] = [
   },
 ];
 
+// Listitem for sidebar list/menu
 const ListItem: React.FC<{
   listItem: ListItemType;
+  isSelected: boolean;
   goToPage: (route: string) => void;
-}> = ({ listItem, goToPage = () => {} }) => {
+}> = ({ listItem, isSelected = false, goToPage = () => {} }) => {
   return (
     <li
-      className="relative -mx-4 px-4 py-2 text-main-text-light dark:text-main-text-dark hover:text-white dark:hover:text-black hover:font-medium cursor-pointer transition-all duration-300 group"
+      className={`relative -mx-4 px-4 py-2 hover:text-white dark:hover:text-black hover:font-medium cursor-pointer transition-all duration-300 group ${
+        isSelected
+          ? "text-main-text-dark dark:text-main-text-light font-medium"
+          : "text-main-text-light dark:text-main-text-dark"
+      }`}
       onClick={() => goToPage(listItem?.route)}>
-      <span className="absolute left-0 top-0 h-full w-0 bg-black dark:bg-white transition-all duration-300 group-hover:w-full"></span>
+      <span
+        className={`absolute left-0 top-0 h-full transition-all duration-300 group-hover:w-full ${
+          isSelected
+            ? "bg-black dark:bg-white w-full"
+            : "bg-black dark:bg-white w-0"
+        }`}></span>
       <span className="relative z-10">{listItem?.label}</span>
     </li>
   );
@@ -51,6 +62,7 @@ const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { mode } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleCloseSidebar = useCallback(() => setIsOpen(false), []);
 
@@ -110,6 +122,7 @@ const Sidebar: React.FC = () => {
             <ListItem
               key={listItem?.id}
               listItem={listItem}
+              isSelected={listItem?.route === location.pathname}
               goToPage={goToPage}
             />
           ))}

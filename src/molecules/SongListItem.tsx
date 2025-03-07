@@ -9,7 +9,7 @@ type Props = {
 const SongListItem: React.FC<Props> = ({ song, handlePlayTrack }) => {
   if (!song)
     return (
-      <p className="text-black dark:text-white font-medium text-sm md:text-sm truncate">
+      <p className="text-main-text-light dark:text-main-text-dark font-medium text-sm md:text-sm truncate">
         No Song Found
       </p>
     );

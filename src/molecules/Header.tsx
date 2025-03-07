@@ -8,9 +8,11 @@ interface HeaderProps {
   onSearch?: (query: string) => void;
 }
 
-const Header = ({ title }: HeaderProps) => {
+// Header component
+const Header: React.FC<HeaderProps> = ({ title }) => {
   const navigate = useNavigate();
 
+  // navigate to dashboard
   const goToDashboard = () => navigate("/");
 
   return (

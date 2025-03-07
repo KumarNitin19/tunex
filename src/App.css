@@ -10,3 +10,9 @@
 .dark .main-content {
   background: #232323;
 }
+
+.gradient-border-card {
+  background: linear-gradient(#f9fafd 0 0) padding-box,
+    linear-gradient(rgb(11 11 15 / 3%), rgb(11 11 15 / 57%), rgb(11 11 15 / 6%))
+      border-box;
+}

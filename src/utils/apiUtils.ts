@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Axios interceptor to handle authorization
 export const privateApiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_SPOTIFY_APP_BASE_URI,
 });

@@ -45,7 +45,6 @@ interface SpotifyState {
   currentGenre: GenericObject<string> | null;
   selectedGenrePlaylist: Array<unknown>;
   playlists: { id: string; name: string; image: string }[];
-  selectedPlaylist: string | null;
   recentlyPlayedSongs: CurrentTrack[];
 }
 
@@ -61,7 +60,6 @@ const initialState: SpotifyState = {
   currentGenre: null,
   selectedGenrePlaylist: [],
   playlists: [],
-  selectedPlaylist: null,
   recentlyPlayedSongs: JSON.parse(
     localStorage?.getItem("recentlyPlayedSongs") || "[]"
   ),
@@ -118,9 +116,6 @@ const spotifySlice = createSlice({
     },
     setCurrentGenre: (state, action) => {
       state.currentGenre = action.payload;
-    },
-    setSelectedPlaylist: (state, action) => {
-      state.selectedPlaylist = action.payload;
     },
     addToRecentSongs: (state, action) => {
       const songIndex = state.recentlyPlayedSongs.findIndex(
@@ -192,6 +187,10 @@ const spotifySlice = createSlice({
   },
 });
 
-export const { setCurrentTrack, setCurrentGenre, addToRecentSongs } =
-  spotifySlice.actions;
+export const {
+  setCurrentTrack,
+  setCurrentGenre,
+  addToRecentSongs,
+  clearRecentSongs,
+} = spotifySlice.actions;
 export default spotifySlice.reducer;

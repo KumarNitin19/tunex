@@ -11,6 +11,7 @@ type props = {
   children: ReactNode;
 };
 
+// All page with sidebar should be wrapped in this
 const WithSidebar: React.FC<props> = ({ children }) => {
   const { loading } = useSelector((store: RootState) => store.spotify);
   const location = useLocation();

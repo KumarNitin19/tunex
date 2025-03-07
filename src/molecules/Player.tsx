@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { Icon } from "@iconify/react";
 import { AppDispatch, RootState } from "../store/store";
 import { useCallback } from "react";
@@ -13,7 +12,7 @@ const Player = () => {
 
   const hidePlayer = useCallback(() => {
     dispatch(setCurrentTrack(null));
-  }, []);
+  }, [dispatch]);
 
   if (!currentTrack) return null;
 

@@ -9,6 +9,7 @@ import {
 } from "../../store/spotifySlice";
 import SongListItem from "../../molecules/SongListItem";
 
+// Release this week page
 const ReleasedThisWeek = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { releasedThisWeek } = useSelector((state: RootState) => state.spotify);
@@ -32,7 +33,7 @@ const ReleasedThisWeek = () => {
     [dispatch]
   );
 
-  return (
+  return releasedThisWeek?.length ? (
     <div className="flex flex-col md:p-6  divide-y dark:divide-[#535353]">
       {releasedThisWeek.map((song) => (
         <SongListItem
@@ -42,6 +43,10 @@ const ReleasedThisWeek = () => {
         />
       ))}
     </div>
+  ) : (
+    <p className="text-main-text-light dark:text-main-text-dark font-medium text-sm md:text-sm truncate">
+      No data found.
+    </p>
   );
 };
 

@@ -26,15 +26,21 @@ const GridSection: React.FC<Props> = ({
           View All →
         </button>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {listItems.map((item) => (
-          <GridTile
-            key={item?.id as string}
-            item={item}
-            handleClick={handleClick}
-          />
-        ))}
-      </div>
+      {listItems?.length ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {listItems.map((item) => (
+            <GridTile
+              key={item?.id as string}
+              item={item}
+              handleClick={handleClick}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="text-main-text-light dark:text-main-text-dark font-medium text-sm md:text-sm truncate">
+          No data found.
+        </p>
+      )}
     </div>
   );
 };

@@ -13,6 +13,7 @@ import GridSection from "../../molecules/GridSection";
 import Banner from "../../molecules/Banner";
 import { GenericObject } from "../../commonType";
 
+// Dashboard Image
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -20,16 +21,19 @@ const Dashboard = () => {
     (state: RootState) => state.spotify
   );
 
+  // Fetch all genre, new-release
   useEffect(() => {
     dispatch(getTopTenReleasedThisWeek());
     dispatch(getGenres());
   }, [dispatch]);
 
+  // First element should be on the banner
   const firstElementFromReleased = useMemo(
     () => releasedThisWeek[0],
     [releasedThisWeek]
   );
 
+  // Other remaining elements if we remove banner
   const allReleaseElements = useMemo(
     () =>
       releasedThisWeek?.filter(
@@ -38,6 +42,7 @@ const Dashboard = () => {
     [releasedThisWeek, firstElementFromReleased]
   );
 
+  // Play track
   const handlePlayTrack = useCallback(
     (track: GenericObject<string>) => {
       dispatch(addToRecentSongs(track));
@@ -53,6 +58,7 @@ const Dashboard = () => {
     [dispatch]
   );
 
+  // Select genre
   const handleGenreClick = useCallback(
     (genre: GenericObject<string>) => {
       dispatch(setCurrentGenre(genre));

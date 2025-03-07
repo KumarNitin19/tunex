@@ -3,6 +3,7 @@ import IconButton from "../atoms/IconButton";
 import useTheme from "../hooks/useTheme";
 import { ThemeEnum } from "../provider/Theme.Provider";
 
+// Common component to toffle theme
 const ToggleTheme = ({ className = "" }: { className?: string }) => {
   const { mode, toggleTheme } = useTheme();
   return (

@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 import {
   addToRecentSongs,
+  clearRecentSongs,
   CurrentTrack,
   setCurrentTrack,
 } from "../../store/spotifySlice";
 import { GenericObject } from "../../commonType";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
+import Button from "../../atoms/Button";
 
 const ListItem = ({
   song,
@@ -33,12 +35,14 @@ const ListItem = ({
   );
 };
 
+// Recently played page(LRU Cache)
 const RecentlyPlayed = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { recentlyPlayedSongs } = useSelector(
     (store: RootState) => store.spotify
   );
 
+  // Play track
   const handlePlayTrack = useCallback(
     (track: GenericObject<string>) => {
       dispatch(addToRecentSongs(track));
@@ -54,13 +58,26 @@ const RecentlyPlayed = () => {
     [dispatch]
   );
 
+  // Clear the cache
+  const clearCache = useCallback(() => dispatch(clearRecentSongs()), []);
+
   return recentlyPlayedSongs?.length === 0 ? (
-    <p>No recent songs found.</p>
+    <p className="text-main-text-light dark:text-main-text-dark font-medium text-sm md:text-sm truncate">
+      No recent songs found.
+    </p>
   ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {recentlyPlayedSongs?.map((song: CurrentTrack) => (
-        <ListItem key={song.id} song={song} handleClick={handlePlayTrack} />
-      ))}
+    <div className="flex flex-col gap-2">
+      <Button
+        title="clear recently played"
+        className="ml-auto"
+        onClick={clearCache}>
+        Clear
+      </Button>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {recentlyPlayedSongs?.map((song: CurrentTrack) => (
+          <ListItem key={song.id} song={song} handleClick={handlePlayTrack} />
+        ))}
+      </div>
     </div>
   );
 };

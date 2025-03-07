@@ -5,6 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import WithSidebar from "../layout/WithSidebar";
 import Loader from "../atoms/Loader";
 
+// Dynamically loading the pages
 const SignUpPage = lazy(() => import("../pages/auth/sign-up"));
 const Dashboard = lazy(() => import("../pages/dashboard"));
 const ReleasedThisWeek = lazy(() => import("../pages/released-this-week"));

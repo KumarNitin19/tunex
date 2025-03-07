@@ -6,6 +6,7 @@ import CardWithGradientBorder from "../../../molecules/CardWithGradientBorder";
 import BACKGROUD_IMAGE from "../../../assets/bg-pattern.png";
 import "./style.css";
 
+// Sign In Page
 function SignIn() {
   const signUpWithSpotify = useCallback(() => {
     const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
