@@ -15,7 +15,7 @@ const Banner: React.FC<Props> = ({ item, onListeNow = () => {} }) => {
           {item?.name}
         </div>
         <Button
-          className="flex gap-2 items-center justify-center !text-black rounded-3xl bg-white hover:!bg-[#ffffffe6] hover:shadow-lg"
+          className="flex gap-2 items-center justify-center !text-black rounded-3xl !bg-white hover:!bg-[#ffffffe6] hover:shadow-lg"
           onClick={() => onListeNow(item)}>
           <Icon icon="material-symbols:play-arrow-rounded" />
           Listen Now

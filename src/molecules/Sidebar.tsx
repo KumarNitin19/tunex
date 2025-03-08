@@ -101,7 +101,7 @@ const Sidebar: React.FC = () => {
             className={`absolute top-0 flex items-center justify-between ${
               isOpen
                 ? "rotate-180 right-0 w-fit"
-                : "rotate-0 -right-[430px] w-full"
+                : "rotate-0 -right-[109%] w-full"
             }`}>
             <IconButton
               className="!inline-flex md:!hidden transition-transform duration-300"
